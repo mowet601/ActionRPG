@@ -49,6 +49,10 @@ AMain::AMain()
 	MaxStamina = 350.f;
 	Stamina = 120.f;
 	Coins = 0;
+
+	RunningSpeed = 650.f;
+	SprintingSpeed = 950.f;
+	bShiftKeyDown = false;
 }
 
 // Called when the game starts or when spawned
@@ -63,6 +67,13 @@ void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bShiftKeyDown) {
+		SetMovementStatus(EMovementStatus::EMS_Sprinting);
+	}
+	else {
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+	}
+
 }
 
 // Called to bind functionality to input
@@ -74,6 +85,9 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::ShiftKeyDown);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMain::ShiftKeyUp);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMain::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveRight);
 
@@ -81,7 +95,6 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &AMain::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AMain::LookUpAtRate);
-
 
 }
 
@@ -141,4 +154,29 @@ void AMain::IncrementCoins(int32 Amount)
 
 void AMain::Die()
 {
+
+}
+
+void AMain::SetMovementStatus(EMovementStatus Status)
+{
+	MovementStatus = Status;
+	if (MovementStatus == EMovementStatus::EMS_Sprinting) {
+
+		GetCharacterMovement()->MaxWalkSpeed = SprintingSpeed;
+
+	}
+	else {
+
+		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+	}
+}
+
+void AMain::ShiftKeyDown()
+{
+	bShiftKeyDown = true;
+}
+
+void AMain::ShiftKeyUp()
+{
+	bShiftKeyDown = false;
 }
