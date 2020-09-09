@@ -66,6 +66,8 @@ void AWeapon::Equip(AMain* Char)
 
 			Char->SetEquippedWeapon(this);
 			Char->SetActiveOverlappingItem(nullptr);
+
+			WeaponState = EWeaponState::EWS_Equipped;
 		}
 
 		if (OnEquipSound) { UGameplayStatics::PlaySound2D(this, OnEquipSound); }
