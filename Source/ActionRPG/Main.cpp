@@ -331,7 +331,7 @@ void AMain::Attack()
 		if (AnimInstance && CombatMontage) {
 
 
-			int32 Section = FMath::RandRange(0, 4);
+			int32 Section = FMath::RandRange(0, 3);
 			switch (Section) {
 
 			case 0:
@@ -347,12 +347,8 @@ void AMain::Attack()
 				AnimInstance->Montage_JumpToSection(FName("Attack_3"), CombatMontage);
 				break;
 			case 3:
-				AnimInstance->Montage_Play(CombatMontage, 1.6f);
-				AnimInstance->Montage_JumpToSection(FName("Attack_4"), CombatMontage);
-				break;
-			case 4:
 				AnimInstance->Montage_Play(CombatMontage, 1.8f);
-				AnimInstance->Montage_JumpToSection(FName("Attack_5"), CombatMontage);
+				AnimInstance->Montage_JumpToSection(FName("Attack_4"), CombatMontage);
 				break;
 			default:
 				;
