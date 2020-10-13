@@ -304,15 +304,7 @@ void AMain::LMBUp()
 
 void AMain::DecrementHealth(float Amount)
 {
-	if (Health - Amount <= 0.f) {
 
-		Health -= Amount;
-		Die();
-	}
-	else {
-
-		Health -= Amount;
-	}
 }
 
 void AMain::IncrementCoins(int32 Amount)
@@ -445,7 +437,21 @@ void AMain::SetInterpToEnemy(bool Interp)
 
 float AMain::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	DecrementHealth(DamageAmount);
+	if (Health - DamageAmount <= 0.f) {
+
+		Health -= DamageAmount;
+		Die();
+		if (DamageCauser) {
+			AEnemy* Enemy = Cast<AEnemy>(DamageCauser);
+			if (Enemy) {
+				Enemy->bHasValidTarget = false;
+			}
+		}
+	}
+	else {
+
+		Health -= DamageAmount;
+	}
 
 	return DamageAmount;
 }
