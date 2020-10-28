@@ -53,7 +53,7 @@ AMain::AMain()
 	GetCharacterMovement()->AirControl = 0.2f;
 
 	MaxHealth = 100.f;
-	Health = 65.f;
+	Health = 100.f;
 	MaxStamina = 150.f;
 	Stamina = 120.f;
 	Coins = 0;
