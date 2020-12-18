@@ -64,6 +64,7 @@ AMain::AMain()
 	SprintingSpeed = 950.f;
 	bShiftKeyDown = false;
 	bLMBDown = false;
+	bESCDown = false;
 
 	//Initialize Enums
 	MovementStatus = EMovementStatus::EMS_Normal;
@@ -231,6 +232,9 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::ShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMain::ShiftKeyUp);
 
+	PlayerInputComponent->BindAction("ESC", IE_Pressed, this, &AMain::ESCDown);
+	PlayerInputComponent->BindAction("ESC", IE_Released, this, &AMain::ESCUp);
+
 	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AMain::LMBDown);
 	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AMain::LMBUp);
 
@@ -310,6 +314,20 @@ void AMain::LMBDown()
 void AMain::LMBUp()
 {
 	bLMBDown = false;
+}
+
+void AMain::ESCDown()
+{
+	bESCDown = true;
+
+	if (MainPlayerController) {
+		MainPlayerController->TogglePauseMenu();
+	}
+}
+
+void AMain::ESCUp()
+{
+	bESCDown = false;
 }
 
 void AMain::DecrementHealth(float Amount)
