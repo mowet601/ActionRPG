@@ -89,11 +89,12 @@ void AMain::BeginPlay()
 	
 	MainPlayerController = Cast<AMainPlayerController>(GetController());
 
-	LoadGameNoSwitch();
+	FString Map = GetWorld()->GetMapName();
+	Map.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 
-	if (MainPlayerController) {
+	if (!Map.Equals("SunTemple")) {
 
-		MainPlayerController->GameModeOnly();
+		LoadGameNoSwitch();
 	}
 }
 
@@ -274,7 +275,6 @@ void AMain::Turn(float Value)
 	}
 }
 
-
 void AMain::LookUp(float Value)
 {
 	if (CanMove(Value)) {
@@ -343,7 +343,6 @@ void AMain::LMBDown()
 	else if (EquippedWeapon){
 
 		Attack();
-
 	}
 }
 
@@ -588,6 +587,7 @@ void AMain::SwitchLevel(FName LevelName)
 		FName CurrentLevelName(*CurrentLevel);
 		if (CurrentLevelName != LevelName) {
 
+			SaveGame();
 			UGameplayStatics::OpenLevel(World, LevelName);
 		}
 	}
@@ -661,6 +661,11 @@ void AMain::LoadGame(bool SetPosition)
 		FName LevelName(LoadGameInstance->CharacterStats.LevelName);
 		SwitchLevel(LevelName);
 	}
+
+	if (MainPlayerController) {
+
+		MainPlayerController->GameModeOnly();
+	}
 }
 
 void AMain::LoadGameNoSwitch()
@@ -694,4 +699,9 @@ void AMain::LoadGameNoSwitch()
 	SetMovementStatus(EMovementStatus::EMS_Normal);
 	GetMesh()->bPauseAnims = false;
 	GetMesh()->bNoSkeletonUpdate = false;
+
+	if (MainPlayerController) {
+
+		MainPlayerController->GameModeOnly();
+	}
 }
